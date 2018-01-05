@@ -1,0 +1,62 @@
+---
+  
+- hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    dev_env_dir: /usr/local/dev-env
+
+  tasks:
+    - name: Check sudo Password
+      command: whoami
+      become: yes
+      become_method: sudo
+
+    - name: Update Homebrew
+      homebrew: update_homebrew=yes
+
+    - name: Tap Caskroom
+      homebrew_tap: tap=caskroom/cask
+
+    - name: Install Docker for Mac
+      homebrew_cask: name=docker state=present
+      environment:
+        HOMEBREW_CASK_OPTS: --appdir=/Applications
+
+    - name: Install Docker and Extras
+      homebrew:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - docker
+        - docker-compose
+
+    - name: Create resolver directory
+      file: path=/etc/resolver state=directory mode=0755
+      become: yes
+      become_method: sudo
+
+    - name: Symlink .test resolver file at /etc/resolver/test
+      file:
+        src: "{{ dev_env_dir }}/ansible/resolver-test.conf"
+        dest: /etc/resolver/test
+        state: link
+        force: yes
+      become: yes
+      become_method: sudo
+
+    - name: Symlink dev script in /usr/local/bin
+      file:
+        src: "{{ dev_env_dir }}/bin/dev"
+        dest: /usr/local/bin/dev
+        state: link
+        force: yes
+
+    - name: Ensure Docker for Mac is started
+      command: open --background -a Docker
+
+    - name: Ensure Docker for Mac container directory is excluded from Time Machine backups
+      command: tmutil addexclusion -p /Users/{{ lookup('env','USER') }}/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2
+      become: yes
+      become_method: sudo
+      ignore_errors: yes
