@@ -69,6 +69,8 @@ echo -e "\n\n"
 ## Check out a copy of this repo ##
 echo 'Checking out dev-env repo (will need your sudo password for this)...'
 sudo git clone https://github.com/EasyRedir/dev-env.git /usr/local/dev-env
+sudo chown -R $(id -u):admin /usr/local/dev-env
+sudo chmod -R g+w /usr/local/dev-env
 
 ## Run Ansible Playbook ##
 echo 'Handing Playbook to Ansible (will require your sudo password)...'
