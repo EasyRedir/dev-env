@@ -66,9 +66,9 @@ else # Ansible needs to be at least 2.0
 fi
 echo -e "\n\n"
 
-## Check out a copy of this repo (first time only) ##
-echo 'Checking out dev-env repo...'
-git clone https://github.com/EasyRedir/dev-env.git /usr/local/dev-env
+## Check out a copy of this repo ##
+echo 'Checking out dev-env repo (will need your sudo password for this)...'
+sudo git clone https://github.com/EasyRedir/dev-env.git /usr/local/dev-env
 
 ## Run Ansible Playbook ##
 echo 'Handing Playbook to Ansible (will require your sudo password)...'
