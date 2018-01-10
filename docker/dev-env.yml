@@ -40,5 +40,14 @@ services:
     networks:
       - default
     restart: on-failure
+  mailcatcher:
+    image: easyredir/mailcatcher:latest
+    environment:
+      - VIRTUAL_HOST=mailcatcher.test
+      - VIRTUAL_PORT=1080
+    expose:
+      - "1080"
+    networks:
+      - default
 networks:
   default:
