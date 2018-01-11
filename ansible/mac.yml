@@ -1,5 +1,5 @@
 ---
-  
+
 - hosts: 127.0.0.1
   connection: local
 
@@ -56,7 +56,7 @@
       command: open --background -a Docker
 
     - name: Ensure Docker for Mac container directory is excluded from Time Machine backups
-      command: tmutil addexclusion -p /Users/{{ lookup('env','USER') }}/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.qcow2
+      command: tmutil addexclusion -p /Users/{{ lookup('env','USER') }}/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.raw
       become: yes
       become_method: sudo
       ignore_errors: yes
