@@ -1,12 +1,24 @@
 version: '3'
 services:
   proxy_web:
-    image: jwilder/nginx-proxy
+    image: nginx:alpine
+    container_name: devenv_proxy_web
     ports:
       - "80:80"
       - "443:443"
     volumes:
+      - nginx_conf:/etc/nginx/conf.d
+      - nginx_certs:/etc/nginx/certs
+    networks:
+      - default
+    restart: on-failure
+  proxy_dockergen:
+    build: .
+    volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
+      - nginx_conf:/etc/nginx/conf.d
+      - nginx_certs:/etc/nginx/certs
+    command: -notify-sighup devenv_proxy_web -watch /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
     networks:
       - default
     restart: on-failure
@@ -40,7 +52,6 @@ services:
       - VIRTUAL_HOST=cadvisor.test
     networks:
       - default
-    restart: on-failure
   mailcatcher:
     image: easyredir/mailcatcher:latest
     environment:
@@ -50,5 +61,8 @@ services:
       - "1080"
     networks:
       - default
+volumes:
+  nginx_conf:
+  nginx_certs:
 networks:
   default:
