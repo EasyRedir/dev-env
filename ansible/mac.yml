@@ -23,14 +23,6 @@
       environment:
         HOMEBREW_CASK_OPTS: --appdir=/Applications
 
-    - name: Install Docker and Extras
-      homebrew:
-        name: "{{ item }}"
-        state: latest
-      with_items:
-        - docker
-        - docker-compose
-
     - name: Create resolver directory
       file: path=/etc/resolver state=directory mode=0755
       become: yes
@@ -44,6 +36,24 @@
         force: yes
       become: yes
       become_method: sudo
+
+    - name: Restart mDNSResponder
+      command: killall -HUP mDNSResponder
+      become: yes
+      become_method: sudo
+      ignore_errors: yes
+
+    - name: Kill any running mDNSResponderHelper processes
+      command: killall mDNSResponderHelper
+      become: yes
+      become_method: sudo
+      ignore_errors: yes
+
+    - name: Flush the DNS cache
+      command: dscacheutil -flushcache
+      become: yes
+      become_method: sudo
+      ignore_errors: yes
 
     - name: Symlink dev script in /usr/local/bin
       file:
