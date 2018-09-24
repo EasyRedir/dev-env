@@ -17,6 +17,7 @@
 
     - name: Tap Caskroom
       homebrew_tap: tap=caskroom/cask
+      ignore_errors: yes
 
     - name: Install Docker for Mac
       homebrew_cask: name=docker state=present
