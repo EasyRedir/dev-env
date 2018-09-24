@@ -67,7 +67,7 @@
       command: open --background -a Docker
 
     - name: Ensure Docker for Mac container directory is excluded from Time Machine backups
-      command: tmutil addexclusion -p /Users/{{ lookup('env','USER') }}/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/Docker.raw
+      command: tmutil addexclusion -p /Users/{{ lookup('env','USER') }}/Library/Containers/com.docker.docker/Data/vms/0/Docker.raw
       become: yes
       become_method: sudo
       ignore_errors: yes
