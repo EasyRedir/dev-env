@@ -23,7 +23,7 @@
       homebrew_cask:
         name: docker
         state: present
-        accept_external_apps: True
+        accept_external_apps: yes
       environment:
         HOMEBREW_CASK_OPTS: --appdir=/Applications
 
