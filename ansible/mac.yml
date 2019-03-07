@@ -20,7 +20,10 @@
       ignore_errors: yes
 
     - name: Install Docker for Mac
-      homebrew_cask: name=docker state=present
+      homebrew_cask:
+        name: docker
+        state: present
+        accept_external_apps: True
       environment:
         HOMEBREW_CASK_OPTS: --appdir=/Applications
 
