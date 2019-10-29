@@ -77,7 +77,11 @@ HEREDOC
   def cmd(args)
     args = ["/bin/bash", "-l"] if args.empty?
     container_id = `docker container ls -q -f name=ermanagement_web_`.strip
-    system("docker exec -i -t #{container_id} #{args.join(" ")}")
+    if container_id == ""
+      puts "Container is not running"
+    else
+      system("docker exec -i -t #{container_id} #{args.join(" ")}")
+    end
   end
 end
 
