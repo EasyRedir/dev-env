@@ -28,7 +28,8 @@ Commands:
   up                 Create and start containers
   update             Update dev-env developer environment
   proxy              Manage proxy services (nginx and dnsmasq)
-  cmd                Open/Run a command line for the web service
+  webinject          Open/Run a command line in the web service
+  cmd                Open/Run a command in a new app container
 
 HEREDOC
 
@@ -74,7 +75,7 @@ HEREDOC
     system(args.join(" "))
   end
 
-  def cmd(args)
+  def webinject(args)
     args = ["/bin/bash", "-l"] if args.empty?
     container_id = `docker container ls -q -f name=ermanagement_web_`.strip
     if container_id == ""
@@ -82,6 +83,12 @@ HEREDOC
     else
       system("docker exec -i -t #{container_id} #{args.join(" ")}")
     end
+  end
+
+  def cmd(args)
+    args = ["/bin/bash", "-l"] if args.empty?
+    args.unshift("run", "worker")
+    run(args)
   end
 end
 
