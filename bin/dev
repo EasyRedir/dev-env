@@ -28,7 +28,7 @@ Commands:
   up                 Create and start containers
   update             Update dev-env developer environment
   proxy              Manage proxy services (nginx and dnsmasq)
-  cmd                Open a command line for the web service
+  cmd                Open/Run a command line for the web service
 
 HEREDOC
 
