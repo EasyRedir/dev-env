@@ -28,12 +28,13 @@ Commands:
   up                 Create and start containers
   update             Update dev-env developer environment
   proxy              Manage proxy services (nginx and dnsmasq)
+  cmd                Open a command line for the web service
 
 HEREDOC
 
   PROXY_UNMODIFIED_TO_COMPOSE=%w{build kill logs ps pull restart rm start stop}
   PROXY_MODIFIED=%w{up run}
-  OTHER_COMMANDS=%w{update proxy}
+  OTHER_COMMANDS=%w{update proxy cmd}
 
   def initialize(args)
     if PROXY_UNMODIFIED_TO_COMPOSE.include?(args[0])
@@ -71,6 +72,12 @@ HEREDOC
     end
     args.unshift("docker-compose", "-f /usr/local/dev-env/docker/dev-env.yml", "-p devenv")
     system(args.join(" "))
+  end
+
+  def cmd(args)
+    args = ["/bin/bash", "-l"] if args.empty?
+    container_id = `docker container ls -q -f name=ermanagement_web_`.strip
+    system("docker exec -i -t #{container_id} #{args.join(" ")}")
   end
 end
 
