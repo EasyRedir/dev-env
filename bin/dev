@@ -35,7 +35,7 @@ HEREDOC
 
   PROXY_UNMODIFIED_TO_COMPOSE=%w{build kill logs ps pull restart rm start stop}
   PROXY_MODIFIED=%w{up run}
-  OTHER_COMMANDS=%w{update proxy cmd}
+  OTHER_COMMANDS=%w{update proxy webinject cmd}
 
   def initialize(args)
     if PROXY_UNMODIFIED_TO_COMPOSE.include?(args[0])
@@ -76,7 +76,7 @@ HEREDOC
   end
 
   def webinject(args)
-    args = ["/bin/bash", "-l"] if args.empty?
+    args = ["/bin/bash"] if args.empty?
     container_id = `docker container ls -q -f name=ermanagement_web_`.strip
     if container_id == ""
       puts "Container is not running"
@@ -86,7 +86,7 @@ HEREDOC
   end
 
   def cmd(args)
-    args = ["/bin/bash", "-l"] if args.empty?
+    args = ["/bin/bash"] if args.empty?
     args.unshift("run", "worker")
     run(args)
   end
