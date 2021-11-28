@@ -42,7 +42,8 @@ services:
       - default
     restart: on-failure
   cadvisor:
-    image: google/cadvisor
+    image: gcr.io/cadvisor/cadvisor
+    privileged: true
     expose:
       - "8080"
     volumes:
@@ -50,6 +51,7 @@ services:
       - "/var/run:/var/run:rw"
       - "/sys:/sys:ro"
       - "/var/lib/docker/:/var/lib/docker:ro"
+      - "/dev/disk/:/dev/disk:ro"
     environment:
       - VIRTUAL_HOST=cadvisor.test
     networks:
