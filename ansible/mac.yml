@@ -12,21 +12,6 @@
       become: yes
       become_method: sudo
 
-    - name: Update Homebrew
-      homebrew: update_homebrew=yes
-
-    - name: Tap Caskroom
-      homebrew_tap: tap=caskroom/cask
-      ignore_errors: yes
-
-    - name: Install Docker for Mac
-      homebrew_cask:
-        name: docker
-        state: present
-        accept_external_apps: yes
-      environment:
-        HOMEBREW_CASK_OPTS: --appdir=/Applications
-
     - name: Create resolver directory
       file: path=/etc/resolver state=directory mode=0755
       become: yes
@@ -65,12 +50,3 @@
         dest: /usr/local/bin/dev
         state: link
         force: yes
-
-    - name: Ensure Docker for Mac is started
-      command: open --background -a Docker
-
-    - name: Ensure Docker for Mac container directory is excluded from Time Machine backups
-      command: tmutil addexclusion -p /Users/{{ lookup('env','USER') }}/Library/Containers/com.docker.docker/Data/vms/0/Docker.raw
-      become: yes
-      become_method: sudo
-      ignore_errors: yes

@@ -6,6 +6,9 @@
 
 ## The tl;dr Version
 
+First, install [Docker Desktop for Mac](https://docs.docker.com/desktop/mac/install/) with the appropriate architecture
+for your current Mac (either Intel or Apple Silicon). Then run this...
+
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/EasyRedir/dev-env/master/bin/bootstrap)
 # Start a new shell and cd to a project that uses [Docker Compose](https://docs.docker.com/compose/)
@@ -24,19 +27,13 @@ dev up
 
 This script will install the following:
 
-- Homebrew with XCode Command Line Tools
-- Homebrew Cask
+- Homebrew
 - Ansible
-- Docker for Mac
-- Docker
-- Docker Compose
 
 and will do these tasks:
 
 - create a DNS resolver configuration pointing .test domains to your dev env Nginx proxy
-- exclude the Docker for Mac disk image location from Time Machine backups
 - symlink the dev script to /usr/local/bin
-- start Docker for Mac
 
 It should run idempotently, meaning you should be able to run it as many times as you want and it won't hurt anything. If it fails due to a temporary condition (like network issues), running it again should pick up where it left off. If new items are added to the script, running it against a functioning environment should only add the new things.
 

@@ -1,68 +1,27 @@
 #!/usr/bin/env bash
 
-# We need at least ansible 2.0 for blockinfile directive
-ANSIBLE_NEEDED="2.0"
-
-# Returns 1 if upgrade is needed
-# $1 - SYSTEM VERSION
-# $2 - NEEDED VERSION
-update_needed () {
-    if [[ $1 == $2 ]]
-    then
-        return 0
-    fi
-    local IFS=.
-    local i ver1=($1) ver2=($2)
-    # fill empty fields in ver1 with zeros
-    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
-    do
-        ver1[i]=0
-    done
-    for ((i=0; i<${#ver1[@]}; i++))
-    do
-        if [[ -z ${ver2[i]} ]]
-        then
-            # fill empty fields in ver2 with zeros
-            ver2[i]=0
-        fi
-        if ((10#${ver1[i]} > 10#${ver2[i]}))
-        then
-            return 1
-        fi
-        if ((10#${ver1[i]} < 10#${ver2[i]}))
-        then
-            return 0
-        fi
-    done
-    return 0
-}
-
 ## Install or Update Homebrew ##
 echo 'Installing or Updating Homebrew...'
 which -s brew
 if [[ $? != 0 ]] ; then
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Homebrew installs into /opt on Apple Silicon powered Mac's. It will not be in the PATH
+    # so we need to set the shell environment variables.
+    if test -f "/opt/homebrew/bin/brew"; then
+        eval $(/opt/homebrew/bin/brew shellenv)
+    fi    
 else
     brew update
 fi
 echo -e "\n\n"
 
-## Install or Update Ansible ##
-echo 'Installing or Updating Ansible...'
+## Install Ansible if necessary ##
+echo 'Installing Ansible if necessary...'
 which -s ansible-playbook
 if [[ $? != 0 ]] ; then
-  echo "Ansible installation..."
+  echo 'We need to install Ansible...'
   brew install ansible
-else # Ansible needs to be at least 2.0
-  ANSIBLE_VERSION=$(ansible --version | grep ansible | cut -d " " -f 2)
-  if update_needed $ANSIBLE_VERSION $ANSIBLE_NEEDED; then
-    echo "Ansible is too old: $ANSIBLE_VERSION. We need >$ANSIBLE_NEEDED"
-    echo "Updating Ansible via Homebrew..."
-    brew upgrade ansible
-    brew link --overwrite ansible
-  else
-    echo "Ansible version is $ANSIBLE_VERSION. Update not needed..."
-  fi
 fi
 echo -e "\n\n"
 
