@@ -1,4 +1,3 @@
-version: '3'
 services:
   proxy_web:
     image: nginx:alpine
@@ -42,7 +41,7 @@ services:
       - default
     restart: on-failure
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor
+    image: gcr.io/cadvisor/cadvisor:latest
     privileged: true
     expose:
       - "8080"
