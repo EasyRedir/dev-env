@@ -39,7 +39,7 @@ HEREDOC
 
   def initialize(args)
     if PROXY_UNMODIFIED_TO_COMPOSE.include?(args[0])
-      system(args.unshift("docker-compose").join(" "))
+      system(args.unshift("docker compose").join(" "))
     elsif PROXY_MODIFIED.include?(args[0])
       send(args[0].to_sym, args)
     elsif OTHER_COMMANDS.include?(args[0])
@@ -51,14 +51,14 @@ HEREDOC
 
   def run(args)
     args.insert(1, "--rm")
-    args.unshift("docker-compose")
+    args.unshift("docker compose")
     system(args.join(" "))
   end
 
   def up(args)
     proxy(["up"])
     args.insert(1, "-d")
-    args.unshift("docker-compose")
+    args.unshift("docker compose")
     system(args.join(" "))
   end
 
@@ -71,7 +71,7 @@ HEREDOC
     if (args[0] == "up")
       args.push("-d")
     end
-    args.unshift("docker-compose", "-f /usr/local/dev-env/docker/dev-env.yml", "-p devenv")
+    args.unshift("docker compose", "-f /usr/local/dev-env/docker/dev-env.yml", "-p devenv")
     system(args.join(" "))
   end
 

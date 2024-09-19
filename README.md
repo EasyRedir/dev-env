@@ -45,7 +45,7 @@ After a successful installation, you can run the bootstrap again or you can inst
 
 ### 2. Start working on a project with a Docker Compose file.
 
-The DevTool script mostly aliases docker-compose for convenience. It enforces some arguments on commands that we found to be more like defaults, as well as just being less characters to type.
+The DevTool script mostly aliases `docker compose` for convenience. It enforces some arguments on commands that we found to be more like defaults, as well as just being less characters to type.
 
     # Start a new shell (The Docker client needs some ENV)
     # cd to a project with a docker-compose.yml file
